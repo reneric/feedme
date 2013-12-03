@@ -14,4 +14,10 @@ class FeedEntry < ActiveRecord::Base
       end  
     end  
   end  
+  belongs_to :feeds
 end
+class Feed < ActiveRecord::Base
+  has_many :feed_entries 
+end
+
+feed_entry = FeedEntry.first

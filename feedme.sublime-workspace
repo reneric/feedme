@@ -200,26 +200,13 @@
 			}
 		},
 		{
-			"file": "app/controllers/feeds_controller.rb",
-			"settings":
-			{
-				"buffer_size": 1745,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "config/application.rb",
-			"settings":
-			{
-				"buffer_size": 1045,
-				"line_ending": "Unix"
-			}
-		},
-		{
+			"contents": "class FeedEntry < ActiveRecord::Base\n  def self.update_from_feed(feed_url)  \n    feed = Feedzirra::Feed.fetch_and_parse(feed_url)  \n    feed.entries.each do |entry|  \n      unless exists? :guid => entry.id  \n        create!(  \n          :name         => entry.title,  \n          :summary      => entry.summary,  \n          :url          => entry.url,  \n          :author           => entry.author,\n          :published_at => entry.published,  \n          :guid         => entry.id  \n        )  \n      end  \n    end  \n  end  \n  belongs_to :feeds\nend\nclass Feed < ActiveRecord::Base\n  has_many :feed_entries \nend\n\nfeed_entry = FeedEntry.first\nfeed = Feed.first\nfeed.feed_entry.create\n",
 			"file": "app/models/feed_entry.rb",
+			"file_size": 640,
+			"file_write_time": 130305719300000000,
 			"settings":
 			{
-				"buffer_size": 483,
+				"buffer_size": 681,
 				"line_ending": "Unix"
 			}
 		},
@@ -228,6 +215,17 @@
 			"settings":
 			{
 				"buffer_size": 278,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "class Feed < ActiveRecord::Base\n	has_many :feed_entries \nend\n",
+			"file": "app/models/feed.rb",
+			"file_size": 60,
+			"file_write_time": 130305709290000000,
+			"settings":
+			{
+				"buffer_size": 61,
 				"line_ending": "Unix"
 			}
 		},
@@ -243,15 +241,7 @@
 			"file": "app/views/feeds/index.html.erb",
 			"settings":
 			{
-				"buffer_size": 898,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "db/migrate/20131203081024_drop_products_table.rb",
-			"settings":
-			{
-				"buffer_size": 154,
+				"buffer_size": 920,
 				"line_ending": "Unix"
 			}
 		},
@@ -463,6 +453,10 @@
 	},
 	"file_history":
 	[
+		"/Users/rsimmons/Desktop/Development/Projects/feedme/app/controllers/feeds_controller.rb",
+		"/Users/rsimmons/Desktop/Development/Projects/feedme/config/application.rb",
+		"/Users/rsimmons/Desktop/Development/Projects/feedme/db/migrate/20131203081024_drop_products_table.rb",
+		"/Users/rsimmons/Desktop/Development/Projects/feedme/db/migrate/20131203075108_create_feed_entries.rb",
 		"/Users/rsimmons/Desktop/Development/Projects/feedme/db/migrate/20131203075005_drop_products_table.rb",
 		"/Users/rsimmons/Desktop/Development/Projects/feedme/app/models/FeedEntry.rb",
 		"/Users/rsimmons/Desktop/Development/Projects/feedme/db/migrate/20131203055355_drop_products_table.rb",
@@ -586,11 +580,7 @@
 		"/Users/rsimmons/Desktop/Development/Projects/Sigma/scss/responsive.scss",
 		"/Users/rsimmons/Desktop/Development/Projects/Sigma/inc/post-types.php",
 		"/Users/rsimmons/Desktop/Development/myApps/firebase/test.php",
-		"/Users/rsimmons/Desktop/Development/Projects/sigma/.git/COMMIT_EDITMSG",
-		"/Users/rsimmons/Desktop/Development/Projects/sigma/careers.php",
-		"/private/var/folders/tx/q246r1wj4rb4wg4nf2hmfgr80000gn/T/c2fca067-be34-4638-a4e6-c47a21a32635/singlesiteinstalls/Dezinsinteractive/includes/js/jquery.isotope.min.js",
-		"/Users/rsimmons/Desktop/Development/Projects/sigma/scss/includes.scss",
-		"/Users/rsimmons/Desktop/Development/Projects/sigma/content-single.php"
+		"/Users/rsimmons/Desktop/Development/Projects/sigma/.git/COMMIT_EDITMSG"
 	],
 	"find":
 	{
@@ -754,7 +744,7 @@
 	"groups":
 	[
 		{
-			"selected": 5,
+			"selected": 3,
 			"sheets":
 			[
 				{
@@ -855,6 +845,22 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
 								"bh_square",
 								"bh_square_center",
 								"bh_square_open",
@@ -863,14 +869,14 @@
 								"bh_regex_center",
 								"bh_regex_open",
 								"bh_regex_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
 								"bh_default",
 								"bh_default_center",
 								"bh_default_open",
@@ -878,23 +884,7 @@
 								"bh_tag",
 								"bh_tag_center",
 								"bh_tag_open",
-								"bh_tag_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close"
+								"bh_tag_close"
 							],
 							"incomplete_sync": null,
 							"remote_loading": false,
@@ -909,19 +899,19 @@
 				},
 				{
 					"buffer": 2,
-					"file": "app/controllers/feeds_controller.rb",
+					"file": "app/models/feed_entry.rb",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1745,
+						"buffer_size": 681,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								165,
-								165
+								673,
+								673
 							]
 						],
 						"settings":
@@ -929,6 +919,22 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
 								"bh_square",
 								"bh_square_center",
 								"bh_square_open",
@@ -937,14 +943,14 @@
 								"bh_regex_center",
 								"bh_regex_open",
 								"bh_regex_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
 								"bh_default",
 								"bh_default_center",
 								"bh_default_open",
@@ -952,23 +958,7 @@
 								"bh_tag",
 								"bh_tag_center",
 								"bh_tag_open",
-								"bh_tag_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close"
+								"bh_tag_close"
 							],
 							"incomplete_sync": null,
 							"remote_loading": false,
@@ -978,26 +968,26 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1009.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 3,
-					"file": "config/application.rb",
-					"semi_transient": false,
+					"file": "db/migrate/20131203075108_create_feed_entries.rb",
+					"semi_transient": true,
 					"settings":
 					{
-						"buffer_size": 1045,
+						"buffer_size": 278,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								334,
-								334
+								0,
+								0
 							]
 						],
 						"settings":
@@ -1005,6 +995,22 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
 								"bh_square",
 								"bh_square_center",
 								"bh_square_open",
@@ -1013,14 +1019,14 @@
 								"bh_regex_center",
 								"bh_regex_open",
 								"bh_regex_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
 								"bh_default",
 								"bh_default_center",
 								"bh_default_open",
@@ -1028,29 +1034,13 @@
 								"bh_tag",
 								"bh_tag_center",
 								"bh_tag_open",
-								"bh_tag_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close"
+								"bh_tag_close"
 							],
 							"incomplete_sync": null,
 							"remote_loading": false,
 							"synced": false,
 							"syntax": "Packages/Ruby/Ruby.tmLanguage",
-							"tab_size": 4,
+							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
@@ -1061,19 +1051,19 @@
 				},
 				{
 					"buffer": 4,
-					"file": "app/models/feed_entry.rb",
+					"file": "app/models/feed.rb",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 483,
+						"buffer_size": 61,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								73,
-								73
+								60,
+								0
 							]
 						],
 						"settings":
@@ -1081,6 +1071,22 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
 								"bh_square",
 								"bh_square_center",
 								"bh_square_open",
@@ -1089,14 +1095,14 @@
 								"bh_regex_center",
 								"bh_regex_open",
 								"bh_regex_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
 								"bh_default",
 								"bh_default_center",
 								"bh_default_open",
@@ -1104,23 +1110,7 @@
 								"bh_tag",
 								"bh_tag_center",
 								"bh_tag_open",
-								"bh_tag_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close"
+								"bh_tag_close"
 							],
 							"incomplete_sync": null,
 							"remote_loading": false,
@@ -1135,82 +1125,6 @@
 				},
 				{
 					"buffer": 5,
-					"file": "db/migrate/20131203075108_create_feed_entries.rb",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 278,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								278,
-								278
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close"
-							],
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/Ruby/Ruby.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 6,
 					"file": "Gemfile",
 					"semi_transient": false,
 					"settings":
@@ -1284,20 +1198,20 @@
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 6,
 					"file": "app/views/feeds/index.html.erb",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 898,
+						"buffer_size": 920,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								866,
-								866
+								888,
+								888
 							]
 						],
 						"settings":
@@ -1305,6 +1219,22 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
 								"bh_square",
 								"bh_square_center",
 								"bh_square_open",
@@ -1313,14 +1243,14 @@
 								"bh_regex_center",
 								"bh_regex_open",
 								"bh_regex_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
 								"bh_default",
 								"bh_default_center",
 								"bh_default_open",
@@ -1328,23 +1258,7 @@
 								"bh_tag",
 								"bh_tag_center",
 								"bh_tag_open",
-								"bh_tag_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close"
+								"bh_tag_close"
 							],
 							"incomplete_sync": null,
 							"remote_loading": false,
@@ -1354,87 +1268,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 181.0,
+						"translation.y": 81.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 8,
-					"file": "db/migrate/20131203081024_drop_products_table.rb",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 154,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								6,
-								23
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close"
-							],
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/Ruby/Ruby.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 9,
+					"buffer": 7,
 					"file": "db/migrate/20131203080910_create_feeds.rb",
 					"semi_transient": false,
 					"settings":
@@ -1455,6 +1295,22 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
 								"bh_square",
 								"bh_square_center",
 								"bh_square_open",
@@ -1463,14 +1319,14 @@
 								"bh_regex_center",
 								"bh_regex_open",
 								"bh_regex_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
 								"bh_default",
 								"bh_default_center",
 								"bh_default_open",
@@ -1478,23 +1334,7 @@
 								"bh_tag",
 								"bh_tag_center",
 								"bh_tag_open",
-								"bh_tag_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close"
+								"bh_tag_close"
 							],
 							"incomplete_sync": null,
 							"remote_loading": false,
