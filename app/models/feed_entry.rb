@@ -7,6 +7,7 @@ class FeedEntry < ActiveRecord::Base
           :name         => entry.title,  
           :summary      => entry.summary,  
           :url          => entry.url,  
+          :author           => entry.author,
           :published_at => entry.published,  
           :guid         => entry.id  
         )  
