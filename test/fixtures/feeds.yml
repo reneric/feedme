@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  url: MyString
+  name: MyString
+  order: 1
+  created: 2013-11-30 18:51:40
+
+two:
+  url: MyString
+  name: MyString
+  order: 1
+  created: 2013-11-30 18:51:40
