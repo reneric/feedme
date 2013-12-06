@@ -1,28 +1,26 @@
-<h1>Listing feed_entries</h1>
+<h1>Listing Feeds</h1>
 
 <table>
   <thead>
     <tr>
-      <th>Name</th>
-      <th>Summary</th>
-      <th>Url</th>
-      <th>Published at</th>
-      <th>Guid</th>
-      <th></th>
+      <th>Nam</th>
+      <th>Base Url</th>
+      <th>Feed Url</th>
+      <th>Modified</th>
       <th></th>
       <th></th>
     </tr>
   </thead>
-
   <tbody>
-    <% @feed_entries.each do |feed_entry| %>
+    <% @feeds.each do |feed| %>
       <tr>
-        <td><%= feed_entry.name %></td>
-        <td><%= feed_entry.author %></td>
-        <td><%= feed_entry.url %></td>
-        <td><%= feed_entry.published_at %></td>
-        <td><%= feed_entry.guid %></td>
-        
+        <td><%= feed.name %></td>
+        <td><%= feed.base_url %></td>
+        <td><%= feed.feed_url %></td>
+        <td><%= feed.last_modified %></td>
+        <td><%= link_to 'Show', feed %></td>
+        <td><%= link_to 'Edit', edit_feeds_path(feed) %></td>
+        <td><%= link_to 'Destroy', feed, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
@@ -30,6 +28,9 @@
 
 <br>
 
+      
+
+<%= link_to 'New Feed', new_feed_path %>
 
 <div id="recent_episodes">
   <h3>Recent Articles</h3>

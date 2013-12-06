@@ -5,6 +5,7 @@ class FeedEntriesController < ApplicationController
   # GET /feed_entries.json
   def index
     @feed_entries = FeedEntry.all
+    @feeds = Feed.all
   end
 
   # GET /feed_entries/1
@@ -12,6 +13,12 @@ class FeedEntriesController < ApplicationController
   def show
   end
 
+  def update
+    @feeds = Feed.all
+    @feeds.each do |feed| 
+      FeedEntry.update_from_feed(feed.feed_url)
+    end
+  end
   # GET /feed_entries/new
   def new
     @feed_entry = FeedEntry.new
