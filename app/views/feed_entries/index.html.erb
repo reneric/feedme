@@ -1,0 +1,42 @@
+<h1>Listing feed_entries</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Summary</th>
+      <th>Url</th>
+      <th>Published at</th>
+      <th>Guid</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @feed_entries.each do |feed_entry| %>
+      <tr>
+        <td><%= feed_entry.name %></td>
+        <td><%= feed_entry.author %></td>
+        <td><%= feed_entry.url %></td>
+        <td><%= feed_entry.published_at %></td>
+        <td><%= feed_entry.guid %></td>
+        
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+
+<div id="recent_episodes">
+  <h3>Recent Articles</h3>
+  <ul>
+  <% for entry in FeedEntry.all(:limit => 40, :order => "published_at desc") %>
+  
+    <li><%= link_to h(entry.name), entry.url %><%= Date.parse(entry.published_at.to_s).strftime("%B %e %Y") %> <%= entry.author %></li>
+  <% end %>
+  </ul>
+</div>

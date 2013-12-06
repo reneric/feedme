@@ -1,6 +1,5 @@
 class CreateFeedEntries < ActiveRecord::Migration
   def change
-    add_column :website
     create_table :feed_entries do |t|
       t.string :name
       t.text :summary

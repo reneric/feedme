@@ -1,7 +1,6 @@
 Feedme::Application.routes.draw do
-  resources :feeds
-
-root :to => 'feeds#index'
+#  get "feed_entries/index"
+root :to => 'feed_entries#index'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

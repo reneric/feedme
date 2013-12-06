@@ -187,7 +187,7 @@
 			"file": "config/routes.rb",
 			"settings":
 			{
-				"buffer_size": 1649,
+				"buffer_size": 1676,
 				"line_ending": "Unix"
 			}
 		},
@@ -200,48 +200,35 @@
 			}
 		},
 		{
-			"contents": "class FeedEntry < ActiveRecord::Base\n  def self.update_from_feed(feed_url)  \n    feed = Feedzirra::Feed.fetch_and_parse(feed_url)  \n    feed.entries.each do |entry|  \n      unless exists? :guid => entry.id  \n        create!(  \n          :name         => entry.title,  \n          :summary      => entry.summary,  \n          :url          => entry.url,  \n          :author           => entry.author,\n          :published_at => entry.published,  \n          :guid         => entry.id  \n        )  \n      end  \n    end  \n  end  \n  belongs_to :feeds\nend\nclass Feed < ActiveRecord::Base\n  has_many :feed_entries \nend\n\nfeed_entry = FeedEntry.first\nfeed = Feed.first\nfeed.feed_entry.create\n",
+			"contents": "class FeedEntry < ActiveRecord::Base\n  def self.update_from_feed(feed_url)  \n    feed = Feedzirra::Feed.fetch_and_parse(feed_url)  \n    feed.entries.each do |entry|  \n      unless exists? :guid => entry.id  \n        create!(  \n          :feed_title     => feed.title,\n          :name         => entry.title,  \n          :summary      => entry.summary,  \n          :url          => entry.url,  \n          :author           => entry.author,\n          :published_at => entry.published,  \n          :guid         => entry.id  \n        )  \n      end  \n    end  \n  end  \n  \nend\nclass Feed < ActiveRecord::Base\n  has_many :feed_entries \nend\n\nfeed_entry = FeedEntry.first\n\n",
 			"file": "app/models/feed_entry.rb",
-			"file_size": 640,
-			"file_write_time": 130305719300000000,
+			"file_size": 624,
+			"file_write_time": 130306953100000000,
 			"settings":
 			{
-				"buffer_size": 681,
+				"buffer_size": 665,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "db/migrate/20131203075108_create_feed_entries.rb",
+			"contents": "class FeedsController < ApplicationController\n  before_action :set_feed, only: [:show, :edit, :update, :destroy]\n\n  # GET /feeds\n  # GET /feeds.json\n  def index\n    @feeds = Feed.all\n    \n  end\n\n  # GET /feeds/1\n  # GET /feeds/1.json\n  def show\n  end\n\n  # GET /feeds/new\n  def new\n    @feed = Feed.new\n  end\n\n  # GET /feeds/1/edit\n  def edit\n  end\n\n  # POST /feeds\n  # POST /feeds.json\n  def create\n    @feed = Feed.new(feed_params)\n\n    respond_to do |format|\n      if @feed.save\n        format.html { redirect_to @feed, notice: 'Feed was successfully created.' }\n        format.json { render action: 'show', status: :created, location: @feed }\n      else\n        format.html { render action: 'new' }\n        format.json { render json: @feed.errors, status: :unprocessable_entity }\n      end\n    end\n  end\n\n  # PATCH/PUT /feeds/1\n  # PATCH/PUT /feeds/1.json\n  def update\n    respond_to do |format|\n      if @feed.update(feed_params)\n        format.html { redirect_to @feed, notice: 'Feed was successfully updated.' }\n        format.json { head :no_content }\n      else\n        format.html { render action: 'edit' }\n        format.json { render json: @feed.errors, status: :unprocessable_entity }\n      end\n    end\n  end\n\n  # DELETE /feeds/1\n  # DELETE /feeds/1.json\n  def destroy\n    @feed.destroy\n    respond_to do |format|\n      format.html { redirect_to feeds_url }\n      format.json { head :no_content }\n    end\n  end\n\n  private\n    # Use callbacks to share common setup or constraints between actions.\n    def set_feed\n      @feed = Feed.find(params[:id])\n    end\n\n    # Never trust parameters from the scary internet, only allow the white list through.\n    def feed_params\n      params.require(:feed).permit(:name, :url, :created)\n    end\nend\n",
+			"file": "app/controllers/feeds_controller.rb",
+			"file_size": 1745,
+			"file_write_time": 130305317500000000,
 			"settings":
 			{
-				"buffer_size": 278,
+				"buffer_size": 1750,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"contents": "class Feed < ActiveRecord::Base\n	has_many :feed_entries \nend\n",
-			"file": "app/models/feed.rb",
-			"file_size": 60,
-			"file_write_time": 130305709290000000,
-			"settings":
-			{
-				"buffer_size": 61,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "Gemfile",
-			"settings":
-			{
-				"buffer_size": 1510,
-				"line_ending": "Unix"
-			}
-		},
-		{
+			"contents": "<h1>Listing feeds</h1>\n\n<table>\n  <thead>\n    <tr>\n      <th>Nam</th>\n      <th>Url</th>\n      <th>Created</th>\n      <th</th>\n      <th</th>\n      <th</th>\n    </tr>\n  </thead>\n\n  <tbody>\n    <% @feeds.each do |feed| %>\n      <tr>\n        <td><%= feed.name %></td>\n        <td><%= feed.url %></td>\n        <td><%= feed.created %></td>\n        <td><%= link_to 'Show', feed %></td>\n        <td><%= link_to 'Edit', edit_feed_path(feed) %></td>\n        <td><%= link_to 'Destroy', feed, method: :delete, data: { confirm: 'Are you sure?' } %></td>\n      </tr>\n    <% end %>\n  </tbody>\n</table>\n\n<br>\n\n<%= link_to 'New Feed', new_feed_path %>\n<div id=\"recent_episodes\">\n  <h3>Recent Articles</h3>\n  <ul>\n  <% for entry in FeedEntry.all(:limit => 40, :order => \"published_at desc\") %>\n  \n    <li><%= link_to h(entry.name), entry.url %> <%=  %><%= Date.parse(entry.published_at.to_s).strftime(\"%d-%m-%Y\") %> - <%= entry.author %></li>\n  <% end %>\n  </ul>\n</div>",
 			"file": "app/views/feeds/index.html.erb",
+			"file_size": 957,
+			"file_write_time": 130306957000000000,
 			"settings":
 			{
-				"buffer_size": 920,
+				"buffer_size": 953,
 				"line_ending": "Unix"
 			}
 		},
@@ -453,6 +440,9 @@
 	},
 	"file_history":
 	[
+		"/Users/rsimmons/Desktop/Development/Projects/feedme/app/controllers/feed_entries_controller.rb",
+		"/Users/rsimmons/Desktop/Development/Projects/feedme/Gemfile",
+		"/Users/rsimmons/Desktop/Development/Projects/feedme/app/models/feed.rb",
 		"/Users/rsimmons/Desktop/Development/Projects/feedme/app/controllers/feeds_controller.rb",
 		"/Users/rsimmons/Desktop/Development/Projects/feedme/config/application.rb",
 		"/Users/rsimmons/Desktop/Development/Projects/feedme/db/migrate/20131203081024_drop_products_table.rb",
@@ -577,10 +567,7 @@
 		"/Users/rsimmons/Desktop/Development/Projects/Sigma/css/animations.css",
 		"/Users/rsimmons/Desktop/Development/Projects/sigma/Gruntfile.js",
 		"/Users/rsimmons/Desktop/Development/Projects/Sigma/content-team.php",
-		"/Users/rsimmons/Desktop/Development/Projects/Sigma/scss/responsive.scss",
-		"/Users/rsimmons/Desktop/Development/Projects/Sigma/inc/post-types.php",
-		"/Users/rsimmons/Desktop/Development/myApps/firebase/test.php",
-		"/Users/rsimmons/Desktop/Development/Projects/sigma/.git/COMMIT_EDITMSG"
+		"/Users/rsimmons/Desktop/Development/Projects/Sigma/scss/responsive.scss"
 	],
 	"find":
 	{
@@ -598,6 +585,10 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"name",
+			"entry",
+			"feedzirra",
+			"strptime",
 			"pauldix",
 			"feedzirr",
 			"''",
@@ -721,11 +712,7 @@
 			"linear",
 			"plugins",
 			"height",
-			"opacity",
-			"height",
-			"opacity",
-			"1s",
-			"modal"
+			"opacity"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -744,7 +731,7 @@
 	"groups":
 	[
 		{
-			"selected": 3,
+			"selected": 4,
 			"sheets":
 			[
 				{
@@ -753,7 +740,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1649,
+						"buffer_size": 1676,
 						"regions":
 						{
 						},
@@ -845,34 +832,22 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
 								"bh_double_quote",
 								"bh_double_quote_center",
 								"bh_double_quote_open",
 								"bh_double_quote_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
 								"bh_regex",
 								"bh_regex_center",
 								"bh_regex_open",
 								"bh_regex_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
 								"bh_single_quote",
 								"bh_single_quote_center",
 								"bh_single_quote_open",
@@ -881,10 +856,22 @@
 								"bh_default_center",
 								"bh_default_open",
 								"bh_default_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close"
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close"
 							],
 							"incomplete_sync": null,
 							"remote_loading": false,
@@ -903,15 +890,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 681,
+						"buffer_size": 665,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								673,
-								673
+								251,
+								251
 							]
 						],
 						"settings":
@@ -919,46 +906,46 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
 								"bh_square",
 								"bh_square_center",
 								"bh_square_open",
 								"bh_square_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
 								"bh_regex",
 								"bh_regex_center",
 								"bh_regex_open",
 								"bh_regex_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
 								"bh_default",
 								"bh_default_center",
 								"bh_default_open",
 								"bh_default_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close"
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close"
 							],
 							"incomplete_sync": null,
 							"remote_loading": false,
@@ -975,19 +962,19 @@
 				},
 				{
 					"buffer": 3,
-					"file": "db/migrate/20131203075108_create_feed_entries.rb",
-					"semi_transient": true,
+					"file": "app/controllers/feeds_controller.rb",
+					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 278,
+						"buffer_size": 1750,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								165,
+								165
 							]
 						],
 						"settings":
@@ -995,34 +982,22 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
 								"bh_double_quote",
 								"bh_double_quote_center",
 								"bh_double_quote_open",
 								"bh_double_quote_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
 								"bh_regex",
 								"bh_regex_center",
 								"bh_regex_open",
 								"bh_regex_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
 								"bh_single_quote",
 								"bh_single_quote_center",
 								"bh_single_quote_open",
@@ -1031,10 +1006,22 @@
 								"bh_default_center",
 								"bh_default_open",
 								"bh_default_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close"
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close"
 							],
 							"incomplete_sync": null,
 							"remote_loading": false,
@@ -1044,174 +1031,26 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 2.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 4,
-					"file": "app/models/feed.rb",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 61,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								60,
-								0
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close"
-							],
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/Ruby/Ruby.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "Gemfile",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1510,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								176,
-								176
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close"
-							],
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/Ruby/Ruby.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 6,
 					"file": "app/views/feeds/index.html.erb",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 920,
+						"buffer_size": 953,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								888,
-								888
+								220,
+								220
 							]
 						],
 						"settings":
@@ -1219,46 +1058,46 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
 								"bh_square",
 								"bh_square_center",
 								"bh_square_open",
 								"bh_square_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
 								"bh_regex",
 								"bh_regex_center",
 								"bh_regex_open",
 								"bh_regex_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
 								"bh_default",
 								"bh_default_center",
 								"bh_default_open",
 								"bh_default_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close"
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close"
 							],
 							"incomplete_sync": null,
 							"remote_loading": false,
@@ -1268,13 +1107,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 81.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 5,
 					"file": "db/migrate/20131203080910_create_feeds.rb",
 					"semi_transient": false,
 					"settings":
@@ -1295,34 +1134,22 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
 								"bh_double_quote",
 								"bh_double_quote_center",
 								"bh_double_quote_open",
 								"bh_double_quote_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
 								"bh_regex",
 								"bh_regex_center",
 								"bh_regex_open",
 								"bh_regex_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
 								"bh_single_quote",
 								"bh_single_quote_center",
 								"bh_single_quote_open",
@@ -1331,10 +1158,22 @@
 								"bh_default_center",
 								"bh_default_open",
 								"bh_default_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close"
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close"
 							],
 							"incomplete_sync": null,
 							"remote_loading": false,
@@ -1941,7 +1780,7 @@
 	"show_minimap": false,
 	"show_open_files": true,
 	"show_tabs": true,
-	"side_bar_visible": true,
+	"side_bar_visible": false,
 	"side_bar_width": 236.0,
 	"status_bar_visible": false,
 	"template_settings":

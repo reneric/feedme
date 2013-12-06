@@ -1,10 +1,12 @@
 require 'spec_helper'
 
-describe "feeds/show" do
+describe "feed_entries/show" do
   before(:each) do
-    @feed = assign(:feed, stub_model(Feed,
+    @feed_entry = assign(:feed_entry, stub_model(FeedEntry,
       :name => "Name",
-      :url => "Url"
+      :summary => "MyText",
+      :url => "Url",
+      :guid => "Guid"
     ))
   end
 
@@ -12,6 +14,8 @@ describe "feeds/show" do
     render
     # Run the generator again with the --webrat flag if you want to use webrat matchers
     rendered.should match(/Name/)
+    rendered.should match(/MyText/)
     rendered.should match(/Url/)
+    rendered.should match(/Guid/)
   end
 end
