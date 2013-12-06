@@ -5,7 +5,6 @@ class FeedEntriesController < ApplicationController
   # GET /feed_entries.json
   def index
     @feed_entries = FeedEntry.all
-    @feeds = Feed.all
   end
 
   # GET /feed_entries/1
@@ -13,12 +12,13 @@ class FeedEntriesController < ApplicationController
   def show
   end
 
-  def update
+ def refresh
     @feeds = Feed.all
     @feeds.each do |feed| 
-      FeedEntry.update_from_feed(feed.feed_url)
+      FeedEntry.update_from_feed(feed.feed_url, feed.id)
     end
   end
+
   # GET /feed_entries/new
   def new
     @feed_entry = FeedEntry.new
@@ -76,6 +76,6 @@ class FeedEntriesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def feed_entry_params
-      params.require(:feed_entry).permit(:name, :summary, :url, :published_at, :guid)
+      params.require(:feed_entry).permit(:feed_id, :condition, :name, :summary, :url, :published_at, :guid)
     end
 end

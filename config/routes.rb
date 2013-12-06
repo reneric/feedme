@@ -1,7 +1,14 @@
 Feedme::Application.routes.draw do
-get "feed_entries/index"  
+  
 
-resources :feed
+  
+
+get "feed_entries/index"  
+get "feed_entries/refresh"  
+get "feeds/index"  
+resources :feed_entries
+resources :feeds
+#resources :feed
 root :to => 'feed_entries#index'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

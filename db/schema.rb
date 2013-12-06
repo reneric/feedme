@@ -11,12 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131206030304) do
+ActiveRecord::Schema.define(version: 20131206042309) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "feed_entries", force: true do |t|
+    t.integer  "feed_id"
     t.string   "name"
     t.text     "summary"
     t.string   "url"
@@ -24,13 +25,12 @@ ActiveRecord::Schema.define(version: 20131206030304) do
     t.string   "guid"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "feed_id"
-    t.string   "author"
   end
+
+  add_index "feed_entries", ["feed_id"], name: "index_feed_entries_on_feed_id", using: :btree
 
   create_table "feeds", force: true do |t|
     t.string   "name"
-    t.string   "base_url"
     t.string   "feed_url"
     t.datetime "last_modified"
     t.datetime "created_at"

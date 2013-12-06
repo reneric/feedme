@@ -23,7 +23,7 @@ describe FeedEntriesController do
   # This should return the minimal set of attributes required to create a valid
   # FeedEntry. As you add validations to FeedEntry, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) { { "name" => "MyString" } }
+  let(:valid_attributes) { { "feed" => "" } }
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
@@ -85,14 +85,14 @@ describe FeedEntriesController do
       it "assigns a newly created but unsaved feed_entry as @feed_entry" do
         # Trigger the behavior that occurs when invalid params are submitted
         FeedEntry.any_instance.stub(:save).and_return(false)
-        post :create, {:feed_entry => { "name" => "invalid value" }}, valid_session
+        post :create, {:feed_entry => { "feed" => "invalid value" }}, valid_session
         assigns(:feed_entry).should be_a_new(FeedEntry)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         FeedEntry.any_instance.stub(:save).and_return(false)
-        post :create, {:feed_entry => { "name" => "invalid value" }}, valid_session
+        post :create, {:feed_entry => { "feed" => "invalid value" }}, valid_session
         response.should render_template("new")
       end
     end
@@ -106,8 +106,8 @@ describe FeedEntriesController do
         # specifies that the FeedEntry created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        FeedEntry.any_instance.should_receive(:update).with({ "name" => "MyString" })
-        put :update, {:id => feed_entry.to_param, :feed_entry => { "name" => "MyString" }}, valid_session
+        FeedEntry.any_instance.should_receive(:update).with({ "feed" => "" })
+        put :update, {:id => feed_entry.to_param, :feed_entry => { "feed" => "" }}, valid_session
       end
 
       it "assigns the requested feed_entry as @feed_entry" do
@@ -128,7 +128,7 @@ describe FeedEntriesController do
         feed_entry = FeedEntry.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         FeedEntry.any_instance.stub(:save).and_return(false)
-        put :update, {:id => feed_entry.to_param, :feed_entry => { "name" => "invalid value" }}, valid_session
+        put :update, {:id => feed_entry.to_param, :feed_entry => { "feed" => "invalid value" }}, valid_session
         assigns(:feed_entry).should eq(feed_entry)
       end
 
@@ -136,7 +136,7 @@ describe FeedEntriesController do
         feed_entry = FeedEntry.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         FeedEntry.any_instance.stub(:save).and_return(false)
-        put :update, {:id => feed_entry.to_param, :feed_entry => { "name" => "invalid value" }}, valid_session
+        put :update, {:id => feed_entry.to_param, :feed_entry => { "feed" => "invalid value" }}, valid_session
         response.should render_template("edit")
       end
     end

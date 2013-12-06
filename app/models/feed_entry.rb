@@ -1,8 +1,10 @@
 require 'uri'
 class FeedEntry < ActiveRecord::Base
   belongs_to :feed
-  def self.update_from_feed(feed_url)
+  def self.update_from_feed(feed_url, feed_id)
     feed = Feedzirra::Feed.fetch_and_parse(feed_url)
+    @feed_url = feed.url
+    @fid = feed_id
     add_entries(feed.entries)
   end
   
@@ -21,10 +23,12 @@ class FeedEntry < ActiveRecord::Base
   def self.add_entries(entries)
     entries.each do |entry|
       unless exists? :guid => entry.id
+      feeds_id = Feed.where(:name => @feed_url)
+
         uri = URI.parse(entry.url)
         create!(
+          :feed_id     => @fid,
           :name         => entry.title,
-          :author       => uri.host,
           :summary      => entry.summary,
           :url          => entry.url,
           :published_at => entry.published,
