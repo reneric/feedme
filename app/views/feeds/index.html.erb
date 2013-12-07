@@ -5,27 +5,21 @@
     <tr>
       <th>Name</th>
       <th>Feed url</th>
-      <th>Last modified</th>
+      <th>Feed Color</th>
       <th></th>
       <th></th>
       <th></th>
     </tr>
   </thead>
 
-  <tbody>
-    <% @feeds.each do |feed| %>
-      <tr>
-        <td><%= feed.name %></td>
-        <td><%= feed.feed_url %></td>
-        <td><%= feed.last_modified %></td>
-        <td><%= link_to 'Show', feed %></td>
-        <td><%= link_to 'Edit', edit_feed_path(feed) %></td>
-        <td><%= link_to 'Destroy', feed, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
+ <tbody id="feeds">
+<% @feeds.each do |feed| %>
+<%= render "feed", :feed => feed %>
+<% end %>
+</tbody>
 </table>
 
 <br>
 
-<%= link_to 'New Feed', new_feed_path %>
+
+<%= link_to 'New Feed', new_feed_path, :remote => true, :id => "new_feed_link" %>

@@ -28,7 +28,7 @@ class FeedEntry < ActiveRecord::Base
         uri = URI.parse(entry.url)
         create!(
           :feed_id     => @fid,
-          :name         => entry.title,
+          :name         => entry.title.sanitize,
           :summary      => entry.summary,
           :url          => entry.url,
           :published_at => entry.published,

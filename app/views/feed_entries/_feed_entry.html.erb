@@ -1,0 +1,5 @@
+<li id="entry_<%= feed_entry.id %>" rel="feed_<%= feed_entry.feed_id %>"><h1><%= link_to h(feed_entry.name), feed_entry.url %></h1>
+<h5><%= Date.parse(feed_entry.published_at.to_s).strftime("%B %e %Y") %></h5>
+<h3><%= Feed.where(:id => feed_entry.feed_id).first.name %></h3>
+<%= link_to 'Delete', feed_entry, method: :delete, data: { confirm: 'Are you sure?' }, :remote => true %>
+  </li>

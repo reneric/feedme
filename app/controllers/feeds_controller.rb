@@ -12,11 +12,16 @@ class FeedsController < ApplicationController
   def show
   end
 
-  # GET /feeds/new
+# GET /feeds/new
+  # GET /feeds/new.json
   def new
     @feed = Feed.new
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { render json: @feed }
+      format.js
+    end
   end
-
   # GET /feeds/1/edit
   def edit
   end
@@ -30,13 +35,14 @@ class FeedsController < ApplicationController
       if @feed.save
         format.html { redirect_to @feed, notice: 'Feed was successfully created.' }
         format.json { render action: 'show', status: :created, location: @feed }
+        format.js
       else
         format.html { render action: 'new' }
         format.json { render json: @feed.errors, status: :unprocessable_entity }
+        format.js
       end
     end
   end
-
   # PATCH/PUT /feeds/1
   # PATCH/PUT /feeds/1.json
   def update
@@ -58,6 +64,7 @@ class FeedsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to feeds_url }
       format.json { head :no_content }
+      format.js
     end
   end
 

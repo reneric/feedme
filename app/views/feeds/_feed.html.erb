@@ -1,0 +1,8 @@
+<tr id="feed_<%= feed.id %>">
+  <td><%= feed.name %></td>
+  <td><%= feed.feed_url %></td>
+  <td><%= feed.feed_color %></td>
+  <td><%= link_to 'Show', feed %></td>
+  <td><%= link_to 'Edit', edit_feed_path(feed) %></td>
+  <td><%= link_to 'Destroy', feed, method: :delete, data: { confirm: 'Are you sure?' }, :remote => true %></td>
+</tr>

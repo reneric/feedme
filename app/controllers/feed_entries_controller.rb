@@ -12,10 +12,20 @@ class FeedEntriesController < ApplicationController
   def show
   end
 
- def refresh
+  def refresh
+    @feed_entries = FeedEntry.all(:limit => 40, :order => "published_at desc")
+  end
+
+ def live
     @feeds = Feed.all
+    @feed_entries = FeedEntry.all(:limit => 40, :order => "published_at desc")
+    respond_to do |format|
     @feeds.each do |feed| 
       FeedEntry.update_from_feed(feed.feed_url, feed.id)
+    end
+      format.html # new.html.erb
+      format.json { render json: @feeds }
+      format.js
     end
   end
 
@@ -65,6 +75,7 @@ class FeedEntriesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to feed_entries_url }
       format.json { head :no_content }
+      format.js
     end
   end
 
